@@ -14,3 +14,4 @@ if __name__ == '__main__':
     print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+service_list=["massage", "facial", "manicure","lifeguard", "gym coach", "facility supervision","reception", "management", "office work"]

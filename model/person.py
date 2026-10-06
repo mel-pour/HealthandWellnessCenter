@@ -17,6 +17,7 @@ class Person:
 
     @person_id.setter
     def person_id(self, value):
+        person_id_validator(value)
         self.__person_id = value
 
     @property
@@ -43,6 +44,7 @@ class Person:
 
     @social_id.setter
     def social_id(self, value):
+        social_id_validator(value)
         self.__social_id = value
 
     @property
@@ -51,6 +53,7 @@ class Person:
 
     @age.setter
     def age(self, value):
+        age_validator(value)
         self.__age = value
 
     @property
@@ -59,6 +62,7 @@ class Person:
 
     @gender.setter
     def gender(self, value):
+        gender_validator(value)
         self.__gender = value
 
     @property
@@ -67,17 +71,40 @@ class Person:
 
     @phone_number.setter
     def phone_number(self, value):
+        phone_number_validator(value)
         self.__phone_number = value
 
 
-
 class Employee(Person):
-    def __init__(self, role , specialty ,salary):
+    def __init__(self, role, specialty, salary):
         # super().__init__(self, person_id, name, family, social_id, age, gender, phone_number)
         self.role = role
         self.specialty = specialty
         self.salary = salary
 
+    @property
+    def role(self):
+        return self.__role
+    @role.setter
+    def role(self, value):
+        employees_role_validator(value)
+        self.__role = value
+
+    @property
+    def specialty(self):
+        return self.__specialty
+    @specialty.setter
+    def specialty(self, value):
+        # employees_specialty_validator()
+        self.__specialty = value
+
+    @property
+    def salary(self):
+        return self.__salary
+    @salary.setter
+    def salary(self, value):
+        employees_salary_validator(value)
+        self.__salary = value
 
 
 
@@ -87,4 +114,3 @@ class Customer(Person):
     def __init__(self, account):
         # super().__init__(self, person_id, name, family, social_id, age, gender, phone_number)
         self.account = account
-
