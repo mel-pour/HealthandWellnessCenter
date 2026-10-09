@@ -74,6 +74,9 @@ class Person:
         phone_number_validator(value)
         self.__phone_number = value
 
+    def get_info(self):
+        pass
+
 
 class Employee(Person):
     def __init__(self, role, specialty, salary):
@@ -107,6 +110,9 @@ class Employee(Person):
         self.__salary = value
 
 
+    def availability(self):
+        pass
+
 
 
 
@@ -114,3 +120,16 @@ class Customer(Person):
     def __init__(self, account):
         # super().__init__(self, person_id, name, family, social_id, age, gender, phone_number)
         self.account = account
+
+
+    def payment(self):
+        pass
+
+    def enroll_in_class(self):
+        pass
+
+    def use_facilities(self):
+        pass
+
+    def book_appointments(self):
+        pass
