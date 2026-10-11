@@ -46,19 +46,3 @@ def phone_number_validator(phone_number):
     return phone_number
 
 
-def employees_role_validator(role):
-    if not isinstance(role, str) or not re.match("(instructor|service_provider|facility_staff|administration)", role):
-        raise ValueError("Enter A Correct Role !!!")
-    return role
-
-
-# def employees_specialty_validator(specialty):
-#     if not isinstance(specialty, str) or not re.match(f"({"|".join(specialty_list)})", specialty):
-#         raise ValueError("Enter A Correct Specialty !!!")
-#     return specialty
-
-
-def employees_salary_validator(salary):
-    if not isinstance(salary, int) or not (3000 <= int(salary) <= 10000):
-        raise ValueError(" Salary Must BE In Authorized Range!!!")
-    return salary

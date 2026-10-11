@@ -78,43 +78,6 @@ class Person:
         pass
 
 
-class Employee(Person):
-    def __init__(self, person_id, name, family, social_id, age, gender, phone_number, role, specialty, salary):
-        Person.__init__(person_id, name, family, social_id, age, gender, phone_number)
-        self.role = role
-        self.specialty = specialty
-        self.salary = salary
-
-    @property
-    def role(self):
-        return self.__role
-
-    @role.setter
-    def role(self, value):
-        employees_role_validator(value)
-        self.__role = value
-
-    @property
-    def specialty(self):
-        return self.__specialty
-
-    @specialty.setter
-    def specialty(self, value):
-        # employees_specialty_validator()
-        self.__specialty = value
-
-    @property
-    def salary(self):
-        return self.__salary
-
-    @salary.setter
-    def salary(self, value):
-        employees_salary_validator(value)
-        self.__salary = value
-
-    def availability(self):
-        pass
-
 
 class Customer(Person):
     def __init__(self, person_id, name, family, social_id, age, gender, phone_number, account):
