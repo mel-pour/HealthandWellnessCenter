@@ -1,13 +1,10 @@
 import re
 
-specialty_list = ["massage", "facial", "manicure", "lifeguard", "gym coach", "facility supervision", "reception",
-                  "management", "office work"]
 
-
-def person_id_validator(person_id):
-    if not isinstance(person_id, int):
-        raise ValueError("Invalid Person ID !!!")
-    return person_id
+def customer_id_validator(customer_id):
+    if not isinstance(customer_id, int):
+        raise ValueError("Invalid Customer ID !!!")
+    return customer_id
 
 
 def name_validator(name):
@@ -41,8 +38,14 @@ def gender_validator(gender):
 
 
 def phone_number_validator(phone_number):
-    if not isinstance(phone_number, str) or not re.match(r"^(\d{11}|\+98\d{10})$", phone_number):
+    if not isinstance(phone_number, str) or not re.match(r"^(09\d{9}|\+98\d{10})$", phone_number):
         raise ValueError("Enter A Correct Phone Number !!!")
     return phone_number
+
+
+def balance_validator(balance):
+    if not isinstance(balance, float) or not (0 <= int(balance)):
+        raise ValueError(" Balance Can Not Be zero Or Negative !!!")
+    return balance
 
 

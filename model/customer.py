@@ -1,24 +1,25 @@
-from model.person_validation import *
+from model.customer_validation import *
 
 
-class Person:
-    def __init__(self, person_id, name, family, social_id, age, gender, phone_number):
-        self.person_id = person_id
+class Customer:
+    def __init__(self, customer_id, name, family, social_id, age, gender, phone_number, balance):
+        self.customer_id = customer_id
         self.name = name
         self.family = family
         self.social_id = social_id
         self.age = age
         self.gender = gender
         self.phone_number = phone_number
+        self.balance = balance
 
     @property
-    def person_id(self):
-        return self.__person_id
+    def customer_id(self):
+        return self.__customer_id
 
-    @person_id.setter
-    def person_id(self, value):
-        person_id_validator(value)
-        self.__person_id = value
+    @customer_id.setter
+    def customer_id(self, value):
+        customer_id_validator(value)
+        self.__customer_id = value
 
     @property
     def name(self):
@@ -74,24 +75,18 @@ class Person:
         phone_number_validator(value)
         self.__phone_number = value
 
+    @property
+    def balance(self):
+        return self.__balance
+
+    @balance.setter
+    def balance(self, value):
+        # balance_validator(value)
+        self.__balance = value
+
+
+
     def get_info(self):
         pass
 
 
-
-class Customer(Person):
-    def __init__(self, person_id, name, family, social_id, age, gender, phone_number, account):
-        Person.__init__(person_id, name, family, social_id, age, gender, phone_number)
-        self.account = account
-
-    def payment(self):
-        pass
-
-    def enroll_in_class(self):
-        pass
-
-    def use_facilities(self):
-        pass
-
-    def book_appointments(self):
-        pass
