@@ -38,7 +38,7 @@ def gender_validator(gender):
 
 
 def phone_number_validator(phone_number):
-    if not isinstance(phone_number, str) or not re.match(r"^(09\d{9}|\+98\d{10})$", phone_number):
+    if not isinstance(phone_number, str) or not re.match(r"^(09\d{9}|\+989\d{9})$", phone_number):
         raise ValueError("Enter A Correct Phone Number !!!")
     return phone_number
 

@@ -81,7 +81,7 @@ class Customer:
 
     @balance.setter
     def balance(self, value):
-        # balance_validator(value)
+        balance_validator(value)
         self.__balance = value
 
 
