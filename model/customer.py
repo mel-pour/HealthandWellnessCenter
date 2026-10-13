@@ -1,4 +1,4 @@
-from model.customer_validation import *
+from validation.customer_validation import *
 
 
 class Customer:
@@ -84,9 +84,26 @@ class Customer:
         balance_validator(value)
         self.__balance = value
 
-
-
     def get_info(self):
         pass
 
+    def add_balance(self):
+        pass
 
+    def deduct_balance(self):
+        pass
+
+    def check_balance(self):
+        pass
+
+    def refund(self):
+        pass
+
+    def book_appointment(self):
+        pass
+
+    def cansel_appointment(self):
+        pass
+
+    def purchase(self):
+        pass

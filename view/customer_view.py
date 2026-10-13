@@ -15,13 +15,21 @@ win = Tk("customer page")
 win.geometry("500x500")
 win.title("login page")
 
+# customer_id
 customer_id = LabelAndEntry(win, text="Customer_Id :", x=20, y=20)
+# name
 name = LabelAndEntry(win, text="Name :", x=20, y=60)
+# family
 family = LabelAndEntry(win, text="family :", x=20, y=100, dtype=IntVar)
+# social_id
 social_id = LabelAndEntry(win, text="social_id :", x=20, y=140)
+# age
 age = LabelAndEntry(win, text="age :", x=20, y=180, dtype=IntVar)
+# gender
 gender = LabelAndEntry(win, text="gender :", x=20, y=220)
+# phone_number
 phone_number = LabelAndEntry(win, text="phone_number :", x=20, y=260)
+# balance
 balance = LabelAndEntry(win, text="balance :", x=20, y=300)
 # role = LabelAndEntry(win, text="Role :", x=20, y=340)
 # Label(win, text="Role :").place(x=20, y=340)
