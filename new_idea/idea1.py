@@ -37,6 +37,7 @@ class CustomerView:
 
         # Variables
         self.name_var = tk.StringVar()
+        self.family_var = tk.StringVar()
         self.social_id_var = tk.StringVar()
         self.phone_var = tk.StringVar()
         self.balance_var = tk.StringVar(value="0.00")
@@ -55,7 +56,7 @@ class CustomerView:
         # Name
         ttk.Label(
             form_frame,
-            text="Full Name:"
+            text="Name:"
         ).grid(row=1, column=0, sticky="w", padx=5, pady=8)
 
         ttk.Entry(
@@ -63,6 +64,18 @@ class CustomerView:
             textvariable=self.name_var,
             width=35
         ).grid(row=1, column=1, sticky="w", padx=5, pady=8)
+
+        # Family
+        ttk.Label(
+            form_frame,
+            text="Family:"
+        ).grid(row=1, column=2, sticky="w", padx=5, pady=8)
+
+        ttk.Entry(
+            form_frame,
+            textvariable=self.family_var,
+            width=35
+        ).grid(row=1, column=3, sticky="w", padx=5, pady=8)
 
         # Social ID
         ttk.Label(
@@ -80,25 +93,25 @@ class CustomerView:
         ttk.Label(
             form_frame,
             text="Phone Number:"
-        ).grid(row=3, column=0, sticky="w", padx=5, pady=8)
+        ).grid(row=2, column=2, sticky="w", padx=5, pady=8)
 
         ttk.Entry(
             form_frame,
             textvariable=self.phone_var,
             width=35
-        ).grid(row=3, column=1, sticky="w", padx=5, pady=8)
+        ).grid(row=2, column=3, sticky="w", padx=5, pady=8)
 
         # Initial balance
         ttk.Label(
             form_frame,
             text="Initial Balance (€):"
-        ).grid(row=4, column=0, sticky="w", padx=5, pady=8)
+        ).grid(row=3, column=0, sticky="w", padx=5, pady=8)
 
         ttk.Entry(
             form_frame,
             textvariable=self.balance_var,
             width=35
-        ).grid(row=4, column=1, sticky="w", padx=5, pady=8)
+        ).grid(row=3, column=1, sticky="w", padx=5, pady=8)
 
         # Buttons
         button_frame = ttk.Frame(form_frame)
@@ -137,6 +150,7 @@ class CustomerView:
         columns = (
             "id",
             "name",
+            "family",
             "social_id",
             "phone",
             "balance"
@@ -151,12 +165,14 @@ class CustomerView:
 
         self.customer_table.heading("id", text="Customer ID")
         self.customer_table.heading("name", text="Name")
+        self.customer_table.heading("family", text="Family")
         self.customer_table.heading("social_id", text="Social ID")
         self.customer_table.heading("phone", text="Phone")
         self.customer_table.heading("balance", text="Balance (€)")
 
         self.customer_table.column("id", width=90)
         self.customer_table.column("name", width=150)
+        self.customer_table.column("family", width=150)
         self.customer_table.column("social_id", width=130)
         self.customer_table.column("phone", width=130)
         self.customer_table.column("balance", width=110)
@@ -169,6 +185,7 @@ class CustomerView:
     def create_customer(self):
 
         name = self.name_var.get().strip()
+        family = self.family_var.get().strip()
         social_id = self.social_id_var.get().strip()
         phone = self.phone_var.get().strip()
 
@@ -198,6 +215,7 @@ class CustomerView:
         customer = {
             "id": self.next_customer_id,
             "name": name,
+            "family": family,
             "social_id": social_id,
             "phone": phone,
             "balance": balance
@@ -212,6 +230,7 @@ class CustomerView:
             values=(
                 customer["id"],
                 customer["name"],
+                customer["family"],
                 customer["social_id"],
                 customer["phone"],
                 f'{customer["balance"]:.2f}'
@@ -230,6 +249,7 @@ class CustomerView:
     def clear_fields(self):
 
         self.name_var.set("")
+        self.family_var.set("")
         self.social_id_var.set("")
         self.phone_var.set("")
         self.balance_var.set("0.00")
