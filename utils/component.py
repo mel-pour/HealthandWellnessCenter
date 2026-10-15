@@ -1,7 +1,7 @@
 from tkinter import *
 
 class LabelAndEntry:
-    def __init__(self, window, text, x,y,distance=100, dtype = StringVar):
+    def __init__(self, window, text, x,y,distance=120, dtype = StringVar):
         Label(window, text=text).place(x=x, y=y)
         self.__variable = dtype()
         Entry(window, textvariable=self.__variable).place(x=x+distance, y=y)
