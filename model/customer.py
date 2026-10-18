@@ -1,11 +1,11 @@
-from validation.customer_validation import *
+from validation.validation import *
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class Customer:
-    def __init__(self, customer_id, name, family, social_id, age, gender, phone_number, balance):
+    def __init__(self, customer_id, name, social_id, age, gender, phone_number, balance):
         self.customer_id = customer_id
         self.name = name
-        self.family = family
         self.social_id = social_id
         self.age = age
         self.gender = gender
@@ -27,17 +27,8 @@ class Customer:
 
     @name.setter
     def name(self, value):
-        name_validator(value)
+        customer_name_validator(value)
         self.__name = value
-
-    @property
-    def family(self):
-        return self.__family
-
-    @family.setter
-    def family(self, value):
-        family_validator(value)
-        self.__family = value
 
     @property
     def social_id(self):
@@ -85,25 +76,58 @@ class Customer:
         self.__balance = value
 
     def get_info(self):
-        pass
+        return (
+            f"ID: {self.customer_id}\n"
+            f"Name: {self.name}\n"
+            f"Social ID: {self.social_id}\n"
+            f"Phone: {self.phone_number}"
+        )
 
-    def add_balance(self):
-        pass
+    def book_appointment(self, appointment):
+        return appointment.book()
 
-    def deduct_balance(self):
-        pass
+    def cancel_appointment(self, appointment):
+        return appointment.cancel()
 
-    def check_balance(self):
-        pass
 
-    def refund(self):
-        pass
+    @staticmethod
+    def to_decimal(amount):
+        return Decimal(str(amount)).quantize(Decimal("0.01"),rounding=ROUND_HALF_UP)
 
-    def book_appointment(self):
-        pass
 
-    def cansel_appointment(self):
-        pass
+    def add_balance(self, amount):
+        amount = self.to_decimal(amount)
+        if amount <= 0:
+            raise ValueError("Amount must be greater than zero.")
+        self.balance += amount
 
-    def purchase(self):
-        pass
+
+    def has_enough_balance(self, amount):
+        amount = self.to_decimal(amount)
+        return self.balance >= amount
+
+
+    def deduct_balance(self, amount):
+        amount = self.to_decimal(amount)
+        if amount <= 0:
+            raise ValueError("Amount must be greater than zero.")
+        if not self.has_enough_balance(amount):
+            raise ValueError("Insufficient account balance.")
+        self.balance -= amount
+
+    def refund(self, amount):
+        amount = self.to_decimal(amount)
+        if amount < 0:
+            raise ValueError("Refund cannot be negative.")
+        self.balance += amount
+
+
+    def purchase_offering(self, offering):
+        if self.has_enough_balance(offering.price):
+            self.deduct_balance(offering.price)
+            return True
+        return False
+
+
+
+
