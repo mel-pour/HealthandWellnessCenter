@@ -111,3 +111,13 @@ class Appointment:
         refund = round(self.price_paid - fee, 2)
         self.status = "cancelled"
         return fee, refund
+
+    def __repr__(self):
+        return (f"Appointment(\n, appointment_id= {self.appointment_id}\n"
+                f", customer_id= {self.customer_id}\n"
+                f", offering_id= {self.offering_id}\n"
+                f", appointment_date= {self.appointment_date}\n"
+                f", start_time= {self.start_time}\n"
+                f", price_paid= {self.price_paid}\n"
+                f", status= {self.status}")
+

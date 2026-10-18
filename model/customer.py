@@ -128,6 +128,11 @@ class Customer:
             return True
         return False
 
-
-
-
+    def __repr__(self):
+        return (f"Customer(\n, customer_id= {self.customer_id}\n"
+                f", name= {self.name}\n"
+                f", social_id= {self.social_id}\n"
+                f", age= {self.age}\n"
+                f", gender= {self.gender}\n"
+                f", phone_number= {self.phone_number}\n"
+                f", balance= {self.balance}")

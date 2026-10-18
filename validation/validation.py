@@ -59,7 +59,7 @@ def phone_number_validator(phone_number):
 
 
 def balance_validator(balance):
-    if not isinstance(balance, float) or not (0 <= int(balance)):
+    if not isinstance(balance,int)or (int(balance) <= 0):
         raise ValueError(" Balance Can Not Be zero Or Negative !!!")
     return balance
 
