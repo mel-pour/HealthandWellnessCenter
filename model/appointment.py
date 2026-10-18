@@ -1,5 +1,6 @@
 from validation.validation import *
 
+
 class Appointment:
     def __init__(
         self,

@@ -1,9 +1,8 @@
 from validation.validation import *
 
+
 class Offering:
-    def __init__(
-            self, offering_id, name, offering_type, price, duration=None
-    ):
+    def __init__(self, offering_id, name, offering_type, price, duration=None):
         self.offering_id = offering_id
         self.name = name
         self.offering_type = offering_type
@@ -63,3 +62,11 @@ class Offering:
             f"Price: {self.price:.2f}, "
             f"Duration: {self.duration}"
         )
+
+    def __repr__(self):
+        return (f"Offering(\n, offering_id= {self.offering_id}\n"
+                f", name= {self.name}\n"
+                f", offering_type= {self.offering_type}\n"
+                f", price= {self.price}\n"
+                f", duration= {self.duration}")
+

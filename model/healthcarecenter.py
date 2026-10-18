@@ -85,3 +85,10 @@ class HealthcareCenter:
 
     def get_all_offerings(self):
         return self.offerings
+
+
+    def __repr__(self):
+        return (f"HealthcareCenter(\n, center_id= {self.center_id}\n"
+                f", name= {self.name}\n"
+                f", center_address= {self.center_address}\n"
+                f", center_phone_number= {self.center_phone_number}\n")
