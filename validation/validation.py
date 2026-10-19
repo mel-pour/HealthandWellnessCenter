@@ -1,6 +1,6 @@
 import re
 from datetime import date, time
-
+from decimal import Decimal
 
 # ==================================================
 # GENERAL VALIDATION
@@ -59,8 +59,17 @@ def phone_number_validator(phone_number):
 
 
 def balance_validator(balance):
-    if not isinstance(balance,int)or (int(balance) <= 0):
-        raise ValueError(" Balance Can Not Be zero Or Negative !!!")
+    if isinstance(balance, bool):
+        raise ValueError("Balance must be a number.")
+
+    if not isinstance(balance, (int, float, Decimal)):
+        raise ValueError("Balance must be a number.")
+
+    balance = Decimal(str(balance))
+
+    if not balance.is_finite() or balance < 0:
+        raise ValueError("Balance cannot be negative.")
+
     return balance
 
 # ==================================================
@@ -76,9 +85,10 @@ def offering_name_validator(value):
 
 
 def offering_type_validator(offering_type):
-    if not isinstance(offering_type, str) or not re.match("(service|facility)", offering_type):
-        raise ValueError("Offering type must be service or facility !!!")
-    return offering_type
+    if not isinstance(offering_type, str) or offering_type.strip().lower() not in ("service", "facility"):
+        raise ValueError("Offering type must be service or facility.")
+
+    return offering_type.strip().lower()
 
 
 def price_validator(value):
@@ -92,7 +102,7 @@ def duration_validator(value):
     if value is None:
         return value
 
-    if isinstance(value, int) or value <= 0:
+    if type(value) is not int or value <= 0:
         raise ValueError("Duration must be a positive number of minutes.")
 
     return value
@@ -136,11 +146,11 @@ def start_time_validator(value):
     return value
 
 
-def appointment_status_validator(value):
-    if not isinstance(value, str) or not re.match("(pending|booked|cancelled)", value):
-                raise ValueError("Status must be pending, booked, or cancelled !!!")
-    return value
+def appointment_status_validator(status):
+    if not isinstance(status, str) or status.strip().lower() not in ("pending","booked","cancelled"):
+        raise ValueError("Status must be pending, booked, or cancelled !!!")
 
+    return status.strip().lower()
 # ==================================================
 # HEALTHCARE CENTER VALIDATION
 # ==================================================
