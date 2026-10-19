@@ -4,7 +4,7 @@ from offering import Offering
 
 
 class HealthcareCenter:
-    def __init__(self, center_id, name, center_address, center_phone_number):
+    def __init__(self, center_id, name, center_address, center_phone_number,offerings):
         self.center_id = center_id
         self.name = name
         self.center_address = center_address

@@ -1,6 +1,8 @@
 from validation.validation import *
 from decimal import Decimal, ROUND_HALF_UP
 
+# from appointment import Appointment
+
 
 class Customer:
     def __init__(self, customer_id, name, social_id, age, gender, phone_number, balance):
