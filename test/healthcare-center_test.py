@@ -1,4 +1,4 @@
-from model.health_care_center import HealthcareCenter
+from model.healthcare_center import HealthcareCenter
 
 
 # ==============================================================================================================

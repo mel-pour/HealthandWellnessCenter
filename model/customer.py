@@ -1,7 +1,5 @@
-from validation.validation import *
-from decimal import Decimal, ROUND_HALF_UP
-
-# from appointment import Appointment
+from validation.validation import (customer_id_validator, customer_name_validator, social_id_validator, age_validator,
+                                   gender_validator, phone_number_validator, balance_validator)
 
 
 class Customer:
@@ -76,59 +74,6 @@ class Customer:
     def balance(self, value):
         balance_validator(value)
         self.__balance = value
-
-    def get_info(self):
-        return (
-            f"ID: {self.customer_id}\n"
-            f"Name: {self.name}\n"
-            f"Social ID: {self.social_id}\n"
-            f"Phone: {self.phone_number}"
-        )
-
-    def book_appointment(self, appointment):
-        return appointment.book()
-
-    def cancel_appointment(self, appointment):
-        return appointment.cancel()
-
-
-    @staticmethod
-    def to_decimal(amount):
-        return Decimal(str(amount)).quantize(Decimal("0.01"),rounding=ROUND_HALF_UP)
-
-
-    def add_balance(self, amount):
-        amount = self.to_decimal(amount)
-        if amount <= 0:
-            raise ValueError("Amount must be greater than zero.")
-        self.balance += amount
-
-
-    def has_enough_balance(self, amount):
-        amount = self.to_decimal(amount)
-        return self.balance >= amount
-
-
-    def deduct_balance(self, amount):
-        amount = self.to_decimal(amount)
-        if amount <= 0:
-            raise ValueError("Amount must be greater than zero.")
-        if not self.has_enough_balance(amount):
-            raise ValueError("Insufficient account balance.")
-        self.balance -= amount
-
-    def refund(self, amount):
-        amount = self.to_decimal(amount)
-        if amount < 0:
-            raise ValueError("Refund cannot be negative.")
-        self.balance += amount
-
-
-    def purchase_offering(self, offering):
-        if self.has_enough_balance(offering.price):
-            self.deduct_balance(offering.price)
-            return True
-        return False
 
     def __repr__(self):
         return (f"Customer(\n, customer_id= {self.customer_id}\n"
