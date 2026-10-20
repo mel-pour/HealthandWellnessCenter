@@ -1,4 +1,4 @@
-from model.healthcarecenter import HealthcareCenter
+from model.health_care_center import HealthcareCenter
 
 
 # center1 = HealthcareCenter(8457,"pardice","17877 Von Karman Ave Ste 400, Irvine, CA 92614, United States","02166686993")
