@@ -1,8 +1,10 @@
-from validation.validation import *
+from validation.validation import (offering_id_validator, offering_name_validator, offering_type_validator,
+                                   price_validator, offering_duration_validator)
 
 
 class Offering:
-    def __init__(self, offering_id, name, offering_type, price, duration=None):
+    def __init__(
+            self, offering_id, name, offering_type, price, duration=None):
         self.offering_id = offering_id
         self.name = name
         self.offering_type = offering_type
@@ -42,8 +44,7 @@ class Offering:
 
     @price.setter
     def price(self, value):
-        price_validator(value)
-        self.__price = value
+        self.__price = price_validator(value)
 
     @property
     def duration(self):
@@ -54,19 +55,9 @@ class Offering:
         offering_duration_validator(self.offering_type, value)
         self.__duration = value
 
-    def get_info(self):
-        return (
-            f"ID: {self.offering_id}, "
-            f"Name: {self.name}, "
-            f"Type: {self.offering_type}, "
-            f"Price: {self.price:.2f}, "
-            f"Duration: {self.duration}"
-        )
-
     def __repr__(self):
         return (f"Offering(\n, offering_id= {self.offering_id}\n"
                 f", name= {self.name}\n"
                 f", offering_type= {self.offering_type}\n"
                 f", price= {self.price}\n"
                 f", duration= {self.duration}")
-

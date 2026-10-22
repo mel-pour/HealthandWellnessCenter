@@ -1,8 +1,8 @@
-from model.appointment import Appointment
+from models.appointment import Appointment
 from datetime import date, time
 
 # ==============================================================================================================
-# model
+# models
 
 
 a_d= date (2026,10,20)

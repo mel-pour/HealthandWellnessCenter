@@ -102,7 +102,7 @@ def duration_validator(value):
     if value is None:
         return value
 
-    if type(value) is not int or value <= 0:
+    if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
         raise ValueError("Duration must be a positive number of minutes.")
 
     return value

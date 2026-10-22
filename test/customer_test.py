@@ -1,7 +1,7 @@
-from model.customer import Customer
+from models.customer import Customer
 
 # ======================================================================================================
-# model
+# models
 
 
 customer1 = Customer(1001,"milad abedi","001-527588-4",35,"male","+989128993925",50)

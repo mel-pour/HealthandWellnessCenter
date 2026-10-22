@@ -1,6 +1,6 @@
 from decimal import Decimal, ROUND_HALF_UP
 
-from model.customer import Customer
+from models.customer import Customer
 
 
 class CustomerService:

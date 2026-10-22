@@ -1,8 +1,8 @@
-from model.healthcare_center import HealthcareCenter
+from models.healthcare_center import HealthcareCenter
 
 
 # ==============================================================================================================
-# model
+# models
 
 
 offerings=[]

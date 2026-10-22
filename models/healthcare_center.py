@@ -4,12 +4,15 @@ from offering import Offering
 
 
 class HealthcareCenter:
-    def __init__(self, center_id, name, center_address, center_phone_number):
+    def __init__(self, center_id, name, center_address, center_phone_number, offerings=None):
         self.center_id = center_id
         self.name = name
         self.center_address = center_address
         self.center_phone_number = center_phone_number
-        self.offerings = []
+        if offerings is None:
+            self.offerings = []
+        else:
+            self.offerings = offerings
 
     @property
     def center_id(self):
@@ -45,19 +48,6 @@ class HealthcareCenter:
         center_phone_number_validator(value)
         self.__center_phone_number = value
 
-    @property
-    def offerings(self):
-        return self.__offerings.copy()
-
-    @offerings.setter
-    def offerings(self, value):
-        if not isinstance(value, list):
-            raise ValueError("Offerings must be provided as a list.")
-
-        if not all(isinstance(item, Offering) for item in value):
-            raise ValueError("Every item must be an Offering object.")
-
-        self.__offerings = value.copy()
 
     def get_info(self):
         return (
@@ -67,24 +57,6 @@ class HealthcareCenter:
             f"Phone: {self.center_phone_number}"
         )
 
-    def add_offering(self, offering):
-        if not isinstance(offering, Offering):
-            raise TypeError("The offering must be an Offering object.")
-
-        if self.find_offering(offering.offering_id) is not None:
-            raise ValueError("This offering ID already exists.")
-
-        self.__offerings.append(offering)
-
-    def find_offering(self, offering_id):
-        for offering in self.__offerings:
-            if offering.offering_id == offering_id:
-                return offering
-
-        return None
-
-    def get_all_offerings(self):
-        return self.offerings
 
 
     def __repr__(self):

@@ -1,7 +1,7 @@
-from model.offering import Offering
+from models.offering import Offering
 
 # ======================================================================================================
-# model
+# models
 
 
 massage = Offering(9001,"massage","service",50,60)

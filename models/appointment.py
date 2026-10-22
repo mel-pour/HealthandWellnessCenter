@@ -85,33 +85,7 @@ class Appointment:
         appointment_status_validator(value)
         self.__status = value
 
-    def get_info(self):
-        return (
-            f"Appointment ID: {self.appointment_id}, "
-            f"Customer ID: {self.customer_id}, "
-            f"Offering ID: {self.offering_id}, "
-            f"Date: {self.appointment_date}, "
-            f"Time: {self.start_time.strftime('%H:%M')}, "
-            f"Status: {self.status}, "
-            f"Price: {self.price_paid:.2f}"
-        )
 
-    def book(self):
-        if self.status != "pending":
-            raise ValueError("Only a pending appointment can be booked.")
-
-        self.status = "booked"
-
-    def calculate_cancellation_fee(self):
-        return round(self.price_paid * 0.20, 2)
-
-    def cancel(self):
-        if self.status != "booked":
-            raise ValueError("Only a booked appointment can be cancelled.")
-        fee = self.calculate_cancellation_fee()
-        refund = round(self.price_paid - fee, 2)
-        self.status = "cancelled"
-        return fee, refund
 
     def __repr__(self):
         return (f"Appointment(\n, appointment_id= {self.appointment_id}\n"
