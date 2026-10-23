@@ -75,6 +75,17 @@ class Customer:
         balance_validator(value)
         self.__balance = value
 
+    def get_info(self):
+        return (
+            f"Customer ID: {self.customer_id}\n"
+            f"Name: {self.name}\n"
+            f"Social ID: {self.social_id}\n"
+            f"Age: {self.age}\n"
+            f"Gender: {self.gender}\n"
+            f"Phone: {self.phone_number}\n"
+            f"Balance: {self.balance}"
+        )
+
     def __repr__(self):
         return (f"Customer(\n, customer_id= {self.customer_id}\n"
                 f", name= {self.name}\n"
