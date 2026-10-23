@@ -1,6 +1,6 @@
 from validation.validation import *
 
-from offering import Offering
+from models.offering import Offering
 
 
 class HealthcareCenter:
