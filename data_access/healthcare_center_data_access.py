@@ -31,12 +31,7 @@ class HealthcareCenterDataAccess:
 
         for item in data["centers"]:
             if item["center_id"] == center_id:
-                center = HealthcareCenter(
-                    item["center_id"],
-                    item["name"],
-                    item["center_address"],
-                    item["center_phone_number"]
-                )
+                offerings = []
 
                 for offering_id in item["offering_ids"]:
                     offering = self.offering_data_access.find_by_id(
@@ -44,7 +39,15 @@ class HealthcareCenterDataAccess:
                     )
 
                     if offering is not None:
-                        center.add_offering(offering)
+                        offerings.append(offering)
+
+                center = HealthcareCenter(
+                    item["center_id"],
+                    item["name"],
+                    item["center_address"],
+                    item["center_phone_number"],
+                    offerings=offerings
+                )
 
                 return center
 
