@@ -1,7 +1,7 @@
 from pathlib import Path
 import tempfile
 
-from repositories.text_file_storage import TextFileStorage
+from data_access.text_file_storage import TextFileStorage
 
 
 class TemporaryStorageMixin:

@@ -1,15 +1,15 @@
 import unittest
 
 from test.test_helpers import TemporaryStorageMixin
-from repositories.offering_repository import OfferingRepository
+from data_access.offering_data_access import OfferingDataAccess
 from services.offering_service import OfferingService
 
 
 class TestOfferingService(TemporaryStorageMixin, unittest.TestCase):
     def setUp(self):
         self.storage = self.make_storage()
-        self.repository = OfferingRepository(self.storage)
-        self.service = OfferingService(self.repository)
+        self.data_access = OfferingDataAccess(self.storage)
+        self.service = OfferingService(self.data_access)
 
     def tearDown(self):
         self.close_storage()

@@ -3,9 +3,9 @@ from datetime import date, time
 from decimal import Decimal
 
 from test.test_helpers import TemporaryStorageMixin
-from repositories.customer_repository import CustomerRepository
-from repositories.offering_repository import OfferingRepository
-from repositories.appointment_repository import AppointmentRepository
+from data_access.customer_data_access import CustomerDataAccess
+from data_access.offering_data_access import OfferingDataAccess
+from data_access.appointment_data_access import AppointmentDataAccess
 from services.customer_service import CustomerService
 from services.offering_service import OfferingService
 from services.appointment_service import AppointmentService
@@ -14,11 +14,11 @@ from services.appointment_service import AppointmentService
 class TestAppointmentService(TemporaryStorageMixin, unittest.TestCase):
     def setUp(self):
         self.storage = self.make_storage()
-        self.customer_service = CustomerService(CustomerRepository(self.storage))
-        self.offering_service = OfferingService(OfferingRepository(self.storage))
-        self.appointment_repository = AppointmentRepository(self.storage)
+        self.customer_service = CustomerService(CustomerDataAccess(self.storage))
+        self.offering_service = OfferingService(OfferingDataAccess(self.storage))
+        self.appointment_data_access = AppointmentDataAccess(self.storage)
         self.service = AppointmentService(
-            self.appointment_repository,
+            self.appointment_data_access,
             self.customer_service,
             self.offering_service
         )

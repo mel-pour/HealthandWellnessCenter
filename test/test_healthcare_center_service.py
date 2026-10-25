@@ -1,8 +1,8 @@
 import unittest
 
 from test.test_helpers import TemporaryStorageMixin
-from repositories.healthcare_center_repository import HealthcareCenterRepository
-from repositories.offering_repository import OfferingRepository
+from data_access.healthcare_center_data_access import HealthcareCenterDataAccess
+from data_access.offering_data_access import OfferingDataAccess
 from services.offering_service import OfferingService
 from services.healthcare_center_service import HealthcareCenterService
 
@@ -10,9 +10,9 @@ from services.healthcare_center_service import HealthcareCenterService
 class TestHealthcareCenterService(TemporaryStorageMixin, unittest.TestCase):
     def setUp(self):
         self.storage = self.make_storage()
-        self.center_repository = HealthcareCenterRepository(self.storage)
-        self.offering_service = OfferingService(OfferingRepository(self.storage))
-        self.service = HealthcareCenterService(self.center_repository, self.offering_service)
+        self.center_data_access = HealthcareCenterDataAccess(self.storage)
+        self.offering_service = OfferingService(OfferingDataAccess(self.storage))
+        self.service = HealthcareCenterService(self.center_data_access, self.offering_service)
 
     def tearDown(self):
         self.close_storage()

@@ -2,14 +2,14 @@ import unittest
 from decimal import Decimal
 
 from test.test_helpers import TemporaryStorageMixin
-from repositories.customer_repository import CustomerRepository
+from data_access.customer_data_access import CustomerDataAccess
 from services.customer_service import CustomerService
 
 
 class TestCustomerService(TemporaryStorageMixin, unittest.TestCase):
     def setUp(self):
         self.storage = self.make_storage()
-        self.repository = CustomerRepository(self.storage)
+        self.repository = CustomerDataAccess(self.storage)
         self.service = CustomerService(self.repository)
         self.customer = self.service.create_customer(
             1, "Milad", "1234567890", 30, "male",
