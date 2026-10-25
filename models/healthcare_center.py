@@ -1,8 +1,5 @@
 from validation.validation import *
 
-from models.offering import Offering
-
-
 class HealthcareCenter:
     def __init__(self, center_id, name, center_address, center_phone_number, offerings=None):
         self.center_id = center_id
