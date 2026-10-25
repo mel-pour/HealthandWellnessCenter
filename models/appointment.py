@@ -1,17 +1,11 @@
-from validation.validation import *
+from validation.validation import (appointment_id_validator, appointment_customer_id_validator,
+                                   appointment_offering_id_validator, appointment_date_validator, start_time_validator,
+                                   price_validator, appointment_status_validator)
 
 
 class Appointment:
-    def __init__(
-        self,
-        appointment_id,
-        customer_id,
-        offering_id,
-        appointment_date,
-        start_time,
-        price_paid,
-        status="pending"
-    ):
+    def __init__(self, appointment_id, customer_id, offering_id, appointment_date, start_time, price_paid,
+                 status="pending"):
         self.appointment_id = appointment_id
         self.customer_id = customer_id
         self.offering_id = offering_id
@@ -20,14 +14,21 @@ class Appointment:
         self.price_paid = price_paid
         self.status = status
 
+    # ==============================================
+    # APPOINTMENT ID
+    # ==============================================
+
     @property
     def appointment_id(self):
         return self.__appointment_id
 
     @appointment_id.setter
     def appointment_id(self, value):
-        appointment_id_validator(value)
-        self.__appointment_id = value
+        self.__appointment_id = appointment_id_validator(value)
+
+    # ==============================================
+    # CUSTOMER ID
+    # ==============================================
 
     @property
     def customer_id(self):
@@ -35,10 +36,11 @@ class Appointment:
 
     @customer_id.setter
     def customer_id(self, value):
-        customer_id_validator(value)
-        if value <= 0:
-            raise ValueError("Customer ID must be positive.")
-        self.__customer_id = value
+        self.__customer_id = appointment_customer_id_validator(value)
+
+    # ==============================================
+    # OFFERING ID
+    # ==============================================
 
     @property
     def offering_id(self):
@@ -46,8 +48,11 @@ class Appointment:
 
     @offering_id.setter
     def offering_id(self, value):
-        offering_id_validator(value)
-        self.__offering_id = value
+        self.__offering_id = appointment_offering_id_validator(value)
+
+    # ==============================================
+    # APPOINTMENT DATE
+    # ==============================================
 
     @property
     def appointment_date(self):
@@ -55,8 +60,11 @@ class Appointment:
 
     @appointment_date.setter
     def appointment_date(self, value):
-        appointment_date_validator(value)
-        self.__appointment_date = value
+        self.__appointment_date = appointment_date_validator(value)
+
+    # ==============================================
+    # START TIME
+    # ==============================================
 
     @property
     def start_time(self):
@@ -64,8 +72,11 @@ class Appointment:
 
     @start_time.setter
     def start_time(self, value):
-        start_time_validator(value)
-        self.__start_time = value
+        self.__start_time = start_time_validator(value)
+
+    # ==============================================
+    # PRICE PAID
+    # ==============================================
 
     @property
     def price_paid(self):
@@ -73,8 +84,11 @@ class Appointment:
 
     @price_paid.setter
     def price_paid(self, value):
-        price_validator(value)
-        self.__price_paid = value
+        self.__price_paid = price_validator(value)
+
+    # ==============================================
+    # STATUS
+    # ==============================================
 
     @property
     def status(self):
@@ -82,17 +96,21 @@ class Appointment:
 
     @status.setter
     def status(self, value):
-        appointment_status_validator(value)
-        self.__status = value
+        self.__status = appointment_status_validator(value)
 
-
+    # ==============================================
+    # OBJECT REPRESENTATION
+    # ==============================================
 
     def __repr__(self):
-        return (f"Appointment(\n, appointment_id= {self.appointment_id}\n"
-                f", customer_id= {self.customer_id}\n"
-                f", offering_id= {self.offering_id}\n"
-                f", appointment_date= {self.appointment_date}\n"
-                f", start_time= {self.start_time}\n"
-                f", price_paid= {self.price_paid}\n"
-                f", status= {self.status}")
-
+        return (
+            f"Appointment("
+            f"appointment_id={self.appointment_id}, "
+            f"customer_id={self.customer_id}, "
+            f"offering_id={self.offering_id}, "
+            f"appointment_date={self.appointment_date!r}, "
+            f"start_time={self.start_time!r}, "
+            f"price_paid={self.price_paid!r}, "
+            f"status={self.status!r}"
+            f")"
+        )

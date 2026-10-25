@@ -9,6 +9,10 @@ from services.offering_service import OfferingService
 from services.appointment_service import AppointmentService
 from services.healthcare_center_service import HealthcareCenterService
 
+from controllers.customer_controller import CustomerController
+from controllers.offering_controller import OfferingController
+from controllers.appointment_controller import AppointmentController
+from controllers.healthcare_center_controller import HealthcareCenterController
 
 storage = TextFileStorage()
 
@@ -33,4 +37,11 @@ appointment_service = AppointmentService(
 healthcare_center_service = HealthcareCenterService(
     center_data_access,
     offering_service
+)
+
+customer_controller = CustomerController(customer_service)
+offering_controller = OfferingController(offering_service)
+appointment_controller = AppointmentController(appointment_service)
+healthcare_center_controller = HealthcareCenterController(
+    healthcare_center_service
 )

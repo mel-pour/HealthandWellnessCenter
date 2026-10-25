@@ -10,9 +10,9 @@ from services.healthcare_center_service import HealthcareCenterService
 class TestHealthcareCenterService(TemporaryStorageMixin, unittest.TestCase):
     def setUp(self):
         self.storage = self.make_storage()
-        self.center_data_access = HealthcareCenterDataAccess(self.storage)
+        self.healthcare_center_data_access = HealthcareCenterDataAccess(self.storage)
         self.offering_service = OfferingService(OfferingDataAccess(self.storage))
-        self.service = HealthcareCenterService(self.center_data_access, self.offering_service)
+        self.service = HealthcareCenterService(self.healthcare_center_data_access, self.offering_service)
 
     def tearDown(self):
         self.close_storage()

@@ -3,13 +3,16 @@ from validation.validation import (offering_id_validator, offering_name_validato
 
 
 class Offering:
-    def __init__(
-            self, offering_id, name, offering_type, price, duration=None):
+    def __init__(self, offering_id, name, offering_type, price, duration=None):
         self.offering_id = offering_id
         self.name = name
         self.offering_type = offering_type
         self.price = price
         self.duration = duration
+
+    # ==============================================
+    # OFFERING ID
+    # ==============================================
 
     @property
     def offering_id(self):
@@ -17,8 +20,11 @@ class Offering:
 
     @offering_id.setter
     def offering_id(self, value):
-        offering_id_validator(value)
-        self.__offering_id = value
+        self.__offering_id = offering_id_validator(value)
+
+    # ==============================================
+    # NAME
+    # ==============================================
 
     @property
     def name(self):
@@ -26,8 +32,11 @@ class Offering:
 
     @name.setter
     def name(self, value):
-        offering_name_validator(value)
-        self.__name = value
+        self.__name = offering_name_validator(value)
+
+    # ==============================================
+    # OFFERING TYPE
+    # ==============================================
 
     @property
     def offering_type(self):
@@ -35,8 +44,11 @@ class Offering:
 
     @offering_type.setter
     def offering_type(self, value):
-        offering_type_validator(value)
-        self.__offering_type = value
+        self.__offering_type = offering_type_validator(value)
+
+    # ==============================================
+    # PRICE
+    # ==============================================
 
     @property
     def price(self):
@@ -46,18 +58,29 @@ class Offering:
     def price(self, value):
         self.__price = price_validator(value)
 
+    # ==============================================
+    # DURATION
+    # ==============================================
+
     @property
     def duration(self):
         return self.__duration
 
     @duration.setter
     def duration(self, value):
-        offering_duration_validator(self.offering_type, value)
-        self.__duration = value
+        self.__duration = offering_duration_validator(self.offering_type, value)
+
+    # ==============================================
+    # OBJECT REPRESENTATION
+    # ==============================================
 
     def __repr__(self):
-        return (f"Offering(\n, offering_id= {self.offering_id}\n"
-                f", name= {self.name}\n"
-                f", offering_type= {self.offering_type}\n"
-                f", price= {self.price}\n"
-                f", duration= {self.duration}")
+        return (
+            f"Offering("
+            f"offering_id={self.offering_id}, "
+            f"name={self.name!r}, "
+            f"offering_type={self.offering_type!r}, "
+            f"price={self.price!r}, "
+            f"duration={self.duration!r}"
+            f")"
+        )

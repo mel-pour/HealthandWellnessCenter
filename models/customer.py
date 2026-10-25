@@ -12,14 +12,21 @@ class Customer:
         self.phone_number = phone_number
         self.balance = balance
 
+    # ==============================================
+    # CUSTOMER ID
+    # ==============================================
+
     @property
     def customer_id(self):
         return self.__customer_id
 
     @customer_id.setter
     def customer_id(self, value):
-        customer_id_validator(value)
-        self.__customer_id = value
+        self.__customer_id = customer_id_validator(value)
+
+    # ==============================================
+    # NAME
+    # ==============================================
 
     @property
     def name(self):
@@ -27,8 +34,11 @@ class Customer:
 
     @name.setter
     def name(self, value):
-        customer_name_validator(value)
-        self.__name = value
+        self.__name = customer_name_validator(value)
+
+    # ==============================================
+    # SOCIAL ID
+    # ==============================================
 
     @property
     def social_id(self):
@@ -36,8 +46,11 @@ class Customer:
 
     @social_id.setter
     def social_id(self, value):
-        social_id_validator(value)
-        self.__social_id = value
+        self.__social_id = social_id_validator(value)
+
+    # ==============================================
+    # AGE
+    # ==============================================
 
     @property
     def age(self):
@@ -45,8 +58,11 @@ class Customer:
 
     @age.setter
     def age(self, value):
-        age_validator(value)
-        self.__age = value
+        self.__age = age_validator(value)
+
+    # ==============================================
+    # GENDER
+    # ==============================================
 
     @property
     def gender(self):
@@ -54,8 +70,11 @@ class Customer:
 
     @gender.setter
     def gender(self, value):
-        gender_validator(value)
-        self.__gender = value
+        self.__gender = gender_validator(value)
+
+    # ==============================================
+    # PHONE NUMBER
+    # ==============================================
 
     @property
     def phone_number(self):
@@ -63,8 +82,11 @@ class Customer:
 
     @phone_number.setter
     def phone_number(self, value):
-        phone_number_validator(value)
-        self.__phone_number = value
+        self.__phone_number = phone_number_validator(value)
+
+    # ==============================================
+    # BALANCE
+    # ==============================================
 
     @property
     def balance(self):
@@ -72,8 +94,11 @@ class Customer:
 
     @balance.setter
     def balance(self, value):
-        balance_validator(value)
-        self.__balance = value
+        self.__balance = balance_validator(value)
+
+    # ==============================================
+    # INFORMATION
+    # ==============================================
 
     def get_info(self):
         return (
@@ -83,14 +108,22 @@ class Customer:
             f"Age: {self.age}\n"
             f"Gender: {self.gender}\n"
             f"Phone: {self.phone_number}\n"
-            f"Balance: {self.balance}"
+            f"Balance: {self.balance:.2f}"
         )
 
+    # ==============================================
+    # OBJECT REPRESENTATION
+    # ==============================================
+
     def __repr__(self):
-        return (f"Customer(\n, customer_id= {self.customer_id}\n"
-                f", name= {self.name}\n"
-                f", social_id= {self.social_id}\n"
-                f", age= {self.age}\n"
-                f", gender= {self.gender}\n"
-                f", phone_number= {self.phone_number}\n"
-                f", balance= {self.balance}")
+        return (
+            f"Customer("
+            f"customer_id={self.customer_id}, "
+            f"name={self.name!r}, "
+            f"social_id={self.social_id!r}, "
+            f"age={self.age}, "
+            f"gender={self.gender!r}, "
+            f"phone_number={self.phone_number!r}, "
+            f"balance={self.balance!r}"
+            f")"
+        )
