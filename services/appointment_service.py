@@ -7,12 +7,12 @@ from models.appointment import Appointment
 
 class AppointmentService:
     def __init__(
-        self,
-        appointment_repository,
-        customer_service,
-        offering_service
+            self,
+            appointment_data_access,
+            customer_service,
+            offering_service
     ):
-        self.appointment_repository = appointment_repository
+        self.appointment_data_access = appointment_data_access
         self.customer_service = customer_service
         self.offering_service = offering_service
 
@@ -45,7 +45,7 @@ class AppointmentService:
         new_start = datetime.combine(appointment_date, start_time)
         new_end = new_start + timedelta(minutes=duration)
 
-        for existing in self.appointment_repository.get_all():
+        for existing in self.appointment_data_access.get_all():
             if (
                 existing.status == "booked"
                 and existing.appointment_date == appointment_date
@@ -77,20 +77,20 @@ class AppointmentService:
         )
 
         # Save the appointment first. Deduct the balance only if saving works.
-        self.appointment_repository.add(appointment)
+        self.appointment_data_access.add(appointment)
 
         try:
             self.customer_service.deduct_balance(customer_id, price)
         except Exception:
             # Roll back the saved appointment if payment fails.
             appointment.status = "cancelled"
-            self.appointment_repository.update(appointment)
+            self.appointment_data_access.update(appointment)
             raise
 
         return appointment
 
     def get_appointment(self, appointment_id):
-        appointment = self.appointment_repository.find_by_id(
+        appointment = self.appointment_data_access.find_by_id(
             appointment_id
         )
 
@@ -100,11 +100,11 @@ class AppointmentService:
         return appointment
 
     def get_all_appointments(self):
-        return self.appointment_repository.get_all()
+        return self.appointment_data_access.get_all()
 
     def get_customer_appointments(self, customer_id):
         self.customer_service.get_customer(customer_id)
-        return self.appointment_repository.get_by_customer_id(customer_id)
+        return self.appointment_data_access.get_by_customer_id(customer_id)
 
     def cancel_appointment(self, appointment_id):
         appointment = self.get_appointment(appointment_id)
@@ -118,7 +118,7 @@ class AppointmentService:
         ) - fee
 
         appointment.status = "cancelled"
-        self.appointment_repository.update(appointment)
+        self.appointment_data_access.update(appointment)
 
         self.customer_service.refund(
             appointment.customer_id,

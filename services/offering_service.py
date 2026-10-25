@@ -4,8 +4,8 @@ from models.offering import Offering
 
 
 class OfferingService:
-    def __init__(self, offering_repository):
-        self.offering_repository = offering_repository
+    def __init__(self, offering_data_access):
+        self.offering_data_access = offering_data_access
 
     def create_offering(
         self, offering_id, name, offering_type, price, duration=None
@@ -13,11 +13,11 @@ class OfferingService:
         offering = Offering(
             offering_id, name, offering_type, price, duration
         )
-        self.offering_repository.add(offering)
+        self.offering_data_access.add(offering)
         return offering
 
     def get_offering(self, offering_id):
-        offering = self.offering_repository.find_by_id(offering_id)
+        offering = self.offering_data_access.find_by_id(offering_id)
 
         if offering is None:
             raise ValueError("Offering not found.")
@@ -25,7 +25,7 @@ class OfferingService:
         return offering
 
     def get_all_offerings(self):
-        return self.offering_repository.get_all()
+        return self.offering_data_access.get_all()
 
     def update_offering(
         self, offering_id, name, offering_type, price, duration=None
@@ -39,7 +39,7 @@ class OfferingService:
         )
         offering.duration = duration
 
-        self.offering_repository.update(offering)
+        self.offering_data_access.update(offering)
         return offering
 
     def get_offering_info(self, offering_id):
@@ -58,3 +58,4 @@ class OfferingService:
             f"Price: {offering.price}\n"
             f"Duration: {duration_text}"
         )
+

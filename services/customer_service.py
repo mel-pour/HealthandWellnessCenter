@@ -4,8 +4,8 @@ from models.customer import Customer
 
 
 class CustomerService:
-    def __init__(self, customer_repository):
-        self.customer_repository = customer_repository
+    def __init__(self, customer_data_access):
+        self.customer_data_access = customer_data_access
 
     @staticmethod
     def to_decimal(amount):
@@ -17,11 +17,11 @@ class CustomerService:
     def create_customer(self, customer_id, name, social_id, age, gender, phone_number, balance):
         customer = Customer(customer_id, name, social_id, age, gender, phone_number, balance)
 
-        self.customer_repository.add(customer)
+        self.customer_data_access.add(customer)
         return customer
 
     def get_customer(self, customer_id):
-        customer = self.customer_repository.find_by_id(customer_id)
+        customer = self.customer_data_access.find_by_id(customer_id)
 
         if customer is None:
             raise ValueError("Customer not found.")
@@ -29,7 +29,7 @@ class CustomerService:
         return customer
 
     def get_all_customers(self):
-        return self.customer_repository.get_all()
+        return self.customer_data_access.get_all()
 
     def get_customer_info(self, customer_id):
         customer = self.get_customer(customer_id)
@@ -49,7 +49,7 @@ class CustomerService:
             raise ValueError("Amount must be greater than zero.")
 
         customer.balance = self.to_decimal(customer.balance) + amount
-        self.customer_repository.update(customer)
+        self.customer_data_access.update(customer)
 
     def has_enough_balance(self, customer_id, amount):
         customer = self.get_customer(customer_id)
@@ -68,7 +68,7 @@ class CustomerService:
             raise ValueError("Insufficient account balance.")
 
         customer.balance = self.to_decimal(customer.balance) - amount
-        self.customer_repository.update(customer)
+        self.customer_data_access.update(customer)
 
     def refund(self, customer_id, amount):
         customer = self.get_customer(customer_id)
@@ -78,7 +78,7 @@ class CustomerService:
             raise ValueError("Refund cannot be negative.")
 
         customer.balance = self.to_decimal(customer.balance) + amount
-        self.customer_repository.update(customer)
+        self.customer_data_access.update(customer)
 
     def purchase_offering(self, customer_id, offering):
         if self.has_enough_balance(customer_id, offering.price):
