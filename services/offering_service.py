@@ -1,25 +1,65 @@
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 
-from decimal import Decimal, ROUND_HALF_UP
 from models.offering import Offering
+from utils.logger import get_logger
+
+
+logger = get_logger(__name__)
 
 
 class OfferingService:
     def __init__(self, offering_data_access):
         self.offering_data_access = offering_data_access
 
+    @staticmethod
+    def _to_decimal(amount):
+        try:
+            if isinstance(amount, bool):
+                raise ValueError("Price must be a valid number.")
+
+            result = Decimal(str(amount))
+
+            if not result.is_finite():
+                raise ValueError("Price must be a finite number.")
+
+            return result.quantize(
+                Decimal("0.01"),
+                rounding=ROUND_HALF_UP
+            )
+
+        except (InvalidOperation, TypeError, ValueError) as error:
+            raise ValueError("Price must be a valid monetary value.") from error
+
     def create_offering(
         self, offering_id, name, offering_type, price, duration=None
     ):
+        price = self._to_decimal(price)
+
         offering = Offering(
-            offering_id, name, offering_type, price, duration
+            offering_id,
+            name,
+            offering_type,
+            price,
+            duration
         )
+
         self.offering_data_access.add(offering)
+
+        logger.info(
+            "Offering created successfully. ID: %s",
+            offering.offering_id
+        )
+
         return offering
 
     def get_offering(self, offering_id):
         offering = self.offering_data_access.find_by_id(offering_id)
 
         if offering is None:
+            logger.warning(
+                "Offering not found. ID: %s",
+                offering_id
+            )
             raise ValueError("Offering not found.")
 
         return offering
@@ -31,15 +71,25 @@ class OfferingService:
         self, offering_id, name, offering_type, price, duration=None
     ):
         offering = self.get_offering(offering_id)
+        price = self._to_decimal(price)
 
         offering.name = name
         offering.offering_type = offering_type
-        offering.price = Decimal(str(price)).quantize(
-            Decimal("0.01"), rounding=ROUND_HALF_UP
-        )
+        offering.price = price
         offering.duration = duration
 
-        self.offering_data_access.update(offering)
+        if not self.offering_data_access.update(offering):
+            logger.error(
+                "Failed to update offering ID %s.",
+                offering_id
+            )
+            raise ValueError("Failed to update offering.")
+
+        logger.info(
+            "Offering updated successfully. ID: %s",
+            offering_id
+        )
+
         return offering
 
     def get_offering_info(self, offering_id):
@@ -58,4 +108,3 @@ class OfferingService:
             f"Price: {offering.price}\n"
             f"Duration: {duration_text}"
         )
-

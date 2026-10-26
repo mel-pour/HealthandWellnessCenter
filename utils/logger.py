@@ -1,20 +1,30 @@
-
 import logging
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
 
-LOG_FILE = LOG_DIR / "healthcare.log"
+def get_logger(name):
+    logger = logging.getLogger(name)
 
-logger = logging.getLogger("healthcare_center")
-logger.setLevel(logging.INFO)
+    if not logger.handlers:
+        project_folder = Path(__file__).resolve().parent.parent
+        log_folder = project_folder / "logs"
+        log_folder.mkdir(exist_ok=True)
 
-if not logger.handlers:
-    file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(message)s"
-    )
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+        log_file = log_folder / "healthcare_center.log"
+
+        file_handler = logging.FileHandler(
+            log_file,
+            encoding="utf-8"
+        )
+
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+
+        file_handler.setFormatter(formatter)
+
+        logger.addHandler(file_handler)
+        logger.setLevel(logging.INFO)
+        logger.propagate = False
+
+    return logger
