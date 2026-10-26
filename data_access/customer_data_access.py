@@ -1,4 +1,3 @@
-
 from decimal import Decimal
 
 from models.customer import Customer
@@ -12,7 +11,11 @@ class CustomerDataAccess:
         data = self.storage.load()
         customers = data["customers"]
 
-        if self.find_by_id(customer.customer_id) is not None:
+        # Check for duplicate customer IDs.
+        if any(
+            item["customer_id"] == customer.customer_id
+            for item in customers
+        ):
             raise ValueError("Customer ID already exists.")
 
         customers.append({
@@ -26,42 +29,24 @@ class CustomerDataAccess:
         })
 
         self.storage.save(data)
+        return True
 
     def find_by_id(self, customer_id):
         data = self.storage.load()
 
         for item in data["customers"]:
             if item["customer_id"] == customer_id:
-                return Customer(
-                    item["customer_id"],
-                    item["name"],
-                    item["social_id"],
-                    item["age"],
-                    item["gender"],
-                    item["phone_number"],
-                    Decimal(item["balance"])
-                )
+                return self._create_customer(item)
 
         return None
 
     def get_all(self):
         data = self.storage.load()
-        customers = []
 
-        for item in data["customers"]:
-            customers.append(
-                Customer(
-                    item["customer_id"],
-                    item["name"],
-                    item["social_id"],
-                    item["age"],
-                    item["gender"],
-                    item["phone_number"],
-                    Decimal(item["balance"])
-                )
-            )
-
-        return customers
+        return [
+            self._create_customer(item)
+            for item in data["customers"]
+        ]
 
     def update(self, customer):
         data = self.storage.load()
@@ -94,3 +79,15 @@ class CustomerDataAccess:
                 return True
 
         return False
+
+    @staticmethod
+    def _create_customer(item):
+        return Customer(
+            customer_id=item["customer_id"],
+            name=item["name"],
+            social_id=item["social_id"],
+            age=item["age"],
+            gender=item["gender"],
+            phone_number=item["phone_number"],
+            balance=Decimal(str(item["balance"]))
+        )

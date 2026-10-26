@@ -1,5 +1,5 @@
-
 from datetime import date, time
+from decimal import Decimal
 
 from models.appointment import Appointment
 
@@ -10,36 +10,34 @@ class AppointmentDataAccess:
 
     def add(self, appointment):
         data = self.storage.load()
+        appointments = data["appointments"]
 
-        if self.find_by_id(appointment.appointment_id) is not None:
+        # Check for duplicate appointment ID.
+        if any(
+            item["appointment_id"] == appointment.appointment_id
+            for item in appointments
+        ):
             raise ValueError("Appointment ID already exists.")
 
-        data["appointments"].append({
+        appointments.append({
             "appointment_id": appointment.appointment_id,
             "customer_id": appointment.customer_id,
             "offering_id": appointment.offering_id,
             "appointment_date": appointment.appointment_date.isoformat(),
             "start_time": appointment.start_time.isoformat(),
-            "price_paid": appointment.price_paid,
+            "price_paid": str(appointment.price_paid),
             "status": appointment.status
         })
 
         self.storage.save(data)
+        return True
 
     def find_by_id(self, appointment_id):
         data = self.storage.load()
 
         for item in data["appointments"]:
             if item["appointment_id"] == appointment_id:
-                return Appointment(
-                    item["appointment_id"],
-                    item["customer_id"],
-                    item["offering_id"],
-                    date.fromisoformat(item["appointment_date"]),
-                    time.fromisoformat(item["start_time"]),
-                    item["price_paid"],
-                    item["status"]
-                )
+                return self._create_appointment(item)
 
         return None
 
@@ -47,15 +45,7 @@ class AppointmentDataAccess:
         data = self.storage.load()
 
         return [
-            Appointment(
-                item["appointment_id"],
-                item["customer_id"],
-                item["offering_id"],
-                date.fromisoformat(item["appointment_date"]),
-                time.fromisoformat(item["start_time"]),
-                item["price_paid"],
-                item["status"]
-            )
+            self._create_appointment(item)
             for item in data["appointments"]
         ]
 
@@ -70,7 +60,7 @@ class AppointmentDataAccess:
                     "offering_id": appointment.offering_id,
                     "appointment_date": appointment.appointment_date.isoformat(),
                     "start_time": appointment.start_time.isoformat(),
-                    "price_paid": appointment.price_paid,
+                    "price_paid": str(appointment.price_paid),
                     "status": appointment.status
                 }
 
@@ -81,11 +71,28 @@ class AppointmentDataAccess:
 
     def delete(self, appointment_id):
         data = self.storage.load()
+        appointments = data["appointments"]
 
-        for index, item in enumerate(data["appointments"]):
+        for index, item in enumerate(appointments):
             if item["appointment_id"] == appointment_id:
-                del data["appointments"][index]
+                del appointments[index]
                 self.storage.save(data)
                 return True
 
         return False
+
+    @staticmethod
+    def _create_appointment(item):
+        return Appointment(
+            appointment_id=item["appointment_id"],
+            customer_id=item["customer_id"],
+            offering_id=item["offering_id"],
+            appointment_date=date.fromisoformat(
+                item["appointment_date"]
+            ),
+            start_time=time.fromisoformat(
+                item["start_time"]
+            ),
+            price_paid=Decimal(str(item["price_paid"])),
+            status=item["status"]
+        )

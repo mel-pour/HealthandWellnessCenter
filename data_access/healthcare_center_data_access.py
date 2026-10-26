@@ -1,4 +1,3 @@
-
 from models.healthcare_center import HealthcareCenter
 
 
@@ -9,11 +8,16 @@ class HealthcareCenterDataAccess:
 
     def add(self, center):
         data = self.storage.load()
+        centers = data["centers"]
 
-        if self.find_by_id(center.center_id) is not None:
+        # Check for duplicate center ID.
+        if any(
+            item["center_id"] == center.center_id
+            for item in centers
+        ):
             raise ValueError("Center ID already exists.")
 
-        data["centers"].append({
+        centers.append({
             "center_id": center.center_id,
             "name": center.name,
             "center_address": center.center_address,
@@ -25,44 +29,24 @@ class HealthcareCenterDataAccess:
         })
 
         self.storage.save(data)
+        return True
 
     def find_by_id(self, center_id):
         data = self.storage.load()
 
         for item in data["centers"]:
             if item["center_id"] == center_id:
-                offerings = []
-
-                for offering_id in item["offering_ids"]:
-                    offering = self.offering_data_access.find_by_id(
-                        offering_id
-                    )
-
-                    if offering is not None:
-                        offerings.append(offering)
-
-                center = HealthcareCenter(
-                    item["center_id"],
-                    item["name"],
-                    item["center_address"],
-                    item["center_phone_number"],
-                    offerings=offerings
-                )
-
-                return center
+                return self._create_center(item)
 
         return None
 
     def get_all(self):
         data = self.storage.load()
-        centers = []
 
-        for item in data["centers"]:
-            center = self.find_by_id(item["center_id"])
-            if center is not None:
-                centers.append(center)
-
-        return centers
+        return [
+            self._create_center(item)
+            for item in data["centers"]
+        ]
 
     def update(self, center):
         data = self.storage.load()
@@ -87,11 +71,31 @@ class HealthcareCenterDataAccess:
 
     def delete(self, center_id):
         data = self.storage.load()
+        centers = data["centers"]
 
-        for index, item in enumerate(data["centers"]):
+        for index, item in enumerate(centers):
             if item["center_id"] == center_id:
-                del data["centers"][index]
+                del centers[index]
                 self.storage.save(data)
                 return True
 
         return False
+
+    def _create_center(self, item):
+        offerings = []
+
+        for offering_id in item["offering_ids"]:
+            offering = self.offering_data_access.find_by_id(
+                offering_id
+            )
+
+            if offering is not None:
+                offerings.append(offering)
+
+        return HealthcareCenter(
+            center_id=item["center_id"],
+            name=item["name"],
+            center_address=item["center_address"],
+            center_phone_number=item["center_phone_number"],
+            offerings=offerings
+        )
