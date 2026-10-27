@@ -41,6 +41,15 @@ class AppointmentDataAccess:
 
         return None
 
+    def get_by_customer_id(self, customer_id):
+        data = self.storage.load()
+
+        return [
+            self._create_appointment(item)
+            for item in data["appointments"]
+            if item["customer_id"] == customer_id
+        ]
+
     def get_all(self):
         data = self.storage.load()
 
