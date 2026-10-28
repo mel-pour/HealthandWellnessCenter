@@ -45,3 +45,5 @@ appointment_controller = AppointmentController(appointment_service)
 healthcare_center_controller = HealthcareCenterController(
     healthcare_center_service
 )
+
+# python -m unittest discover -s test -p "test_*.py" -v

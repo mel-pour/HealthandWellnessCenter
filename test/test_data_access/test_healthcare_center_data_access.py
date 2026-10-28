@@ -1,3 +1,7 @@
+import json
+import tempfile
+import unittest
+from pathlib import Path
 
 from data_access.text_file_storage import TextFileStorage
 from data_access.offering_data_access import OfferingDataAccess
@@ -7,59 +11,115 @@ from models.offering import Offering
 from models.healthcare_center import HealthcareCenter
 
 
-storage = TextFileStorage()
+class TestHealthcareCenterDataAccess(unittest.TestCase):
 
-offering_data = OfferingDataAccess(storage)
-center_data = HealthcareCenterDataAccess(storage, offering_data)
+    def setUp(self):
+        # Create a temporary directory for test data.
+        self.temp_directory = tempfile.TemporaryDirectory()
+        self.file_path = Path(self.temp_directory.name) / "test_data.txt"
 
-# Create and save an offering
-offering = Offering(
-    offering_id=10,
-    name="Test Massage",
-    offering_type="service",
-    price=50.00,
-    duration=60
-)
+        # Initialize an empty JSON file.
+        self.file_path.write_text(
+            json.dumps({
+                "customers": [],
+                "offerings": [],
+                "appointments": [],
+                "centers": []
+            }),
+            encoding="utf-8"
+        )
 
-offering_data.add(offering)
-print("Offering saved!")
+        # Use the temporary file instead of the real data file.
+        self.storage = TextFileStorage.__new__(TextFileStorage)
+        self.storage.file_path = self.file_path
 
-# Create a healthcare center containing the offering
-center = HealthcareCenter(
-    center_id=1,
-    name="Test Healthcare Center",
-    center_address="123 Test Street",
-    center_phone_number="09123456789",
-    offerings=[offering]
-)
+        # Set up data-access classes.
+        self.offering_data = OfferingDataAccess(self.storage)
+        self.center_data = HealthcareCenterDataAccess(
+            self.storage,
+            self.offering_data
+        )
 
-# Save the center
-center_data.add(center)
-print("Healthcare center saved!")
+        # Create a test offering.
+        self.offering = Offering(
+            offering_id=10,
+            name="Test Massage",
+            offering_type="service",
+            price=50.00,
+            duration=60
+        )
 
-# Find the center
-found_center = center_data.find_by_id(1)
+        # Create a healthcare center containing the offering.
+        self.center = HealthcareCenter(
+            center_id=1,
+            name="Test Healthcare Center",
+            center_address="123 Test Street",
+            center_phone_number="09123456789",
+            offerings=[self.offering]
+        )
 
-assert found_center is not None
-assert found_center.center_id == 1
-assert found_center.name == "Test Healthcare Center"
-assert found_center.center_address == "123 Test Street"
-assert found_center.center_phone_number == "09123456789"
+    def tearDown(self):
+        # Remove the temporary directory after each test.
+        self.temp_directory.cleanup()
 
-print("Healthcare center found successfully!")
-print(found_center.get_info())
+    def test_add_and_find_center(self):
+        # Save the offering before saving the center.
+        self.offering_data.add(self.offering)
+        self.center_data.add(self.center)
 
-# Verify the offering relationship
-assert len(found_center.offerings) == 1
-assert found_center.offerings[0].offering_id == 10
-assert found_center.offerings[0].name == "Test Massage"
+        # Retrieve the center.
+        found_center = self.center_data.find_by_id(1)
 
-print("Center offerings loaded successfully!")
+        # Verify the center's details.
+        self.assertIsNotNone(found_center)
+        self.assertEqual(found_center.center_id, 1)
+        self.assertEqual(
+            found_center.name,
+            "Test Healthcare Center"
+        )
+        self.assertEqual(
+            found_center.center_address,
+            "123 Test Street"
+        )
+        self.assertEqual(
+            found_center.center_phone_number,
+            "09123456789"
+        )
 
-# Load all centers
-all_centers = center_data.get_all()
+    def test_center_offerings_are_loaded(self):
+        # Save the offering and center.
+        self.offering_data.add(self.offering)
+        self.center_data.add(self.center)
 
-assert len(all_centers) >= 1
+        # Retrieve the center and verify its offerings.
+        found_center = self.center_data.find_by_id(1)
 
-print("All healthcare centers loaded successfully!")
-print("Test passed!")
+        self.assertIsNotNone(found_center)
+        self.assertEqual(len(found_center.offerings), 1)
+        self.assertEqual(
+            found_center.offerings[0].offering_id,
+            10
+        )
+        self.assertEqual(
+            found_center.offerings[0].name,
+            "Test Massage"
+        )
+
+    def test_get_all_centers(self):
+        # Save the offering and center.
+        self.offering_data.add(self.offering)
+        self.center_data.add(self.center)
+
+        # Retrieve all centers.
+        all_centers = self.center_data.get_all()
+
+        self.assertEqual(len(all_centers), 1)
+        self.assertEqual(all_centers[0].center_id, 1)
+        self.assertEqual(
+            all_centers[0].name,
+            "Test Healthcare Center"
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()
