@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from decimal import Decimal
 
 
 class OfferingView:
@@ -108,18 +109,46 @@ class OfferingView:
 
     def create_offering(self):
         try:
-            offering_id = int(self.id_entry.get().strip())
+            # Validate Offering ID
+            offering_id_text = self.id_entry.get().strip()
+
+            if not offering_id_text:
+                raise ValueError("Please enter an Offering ID.")
+
+            offering_id = int(offering_id_text)
+
+            # Validate name
             name = self.name_entry.get().strip()
+
+            if not name:
+                raise ValueError("Please enter an offering name.")
+
+            # Validate offering type
             offering_type = self.type_combo.get()
+
+            if not offering_type:
+                raise ValueError("Please select an offering type.")
+
+            # Validate price
             price = self.price_entry.get().strip()
 
+            if not price:
+                raise ValueError("Please enter the offering price.")
+
+            # Validate duration
             duration_text = self.duration_entry.get().strip()
 
             if duration_text:
-                duration = int(duration_text)
+                try:
+                    duration = int(duration_text)
+                except ValueError as error:
+                    raise ValueError(
+                        "Duration must be a whole number of minutes."
+                    ) from error
             else:
                 duration = None
 
+            # Create offering through the service layer
             offering = self.offering_service.create_offering(
                 offering_id,
                 name,
@@ -164,12 +193,14 @@ class OfferingView:
                     else "N/A"
                 )
 
+                price = Decimal(str(offering.price))
+
                 self.offerings_list.insert(
                     tk.END,
                     f"ID: {offering.offering_id} | "
                     f"{offering.name} | "
                     f"Type: {offering.offering_type} | "
-                    f"Price: {offering.price} | "
+                    f"Price: ${price:.2f} | "
                     f"Duration: {duration}"
                 )
 

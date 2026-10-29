@@ -48,9 +48,10 @@ class AppointmentView:
             command=self.view_customer_appointments
         ).pack(side="left", padx=10)
 
+        # Customer Balance
         self.balance_label = tk.Label(
             self.main_frame,
-            text="Customer Balance: --",
+            text="Customer: -- | ID: -- | Balance: --",
             font=("Arial", 11, "bold")
         )
         self.balance_label.pack(anchor="w", pady=5)
@@ -206,15 +207,27 @@ class AppointmentView:
 
             offering = self.offerings[selected_index]
 
-            appointment_date = datetime.strptime(
-                self.date_entry.get().strip(),
-                "%Y-%m-%d"
-            ).date()
+            date_text = self.date_entry.get().strip()
+            time_text = self.time_entry.get().strip()
 
-            start_time = datetime.strptime(
-                self.time_entry.get().strip(),
-                "%H:%M"
-            ).time()
+            try:
+                appointment_date = datetime.strptime(
+                    date_text, "%Y-%m-%d"
+                ).date()
+            except ValueError as error:
+                raise ValueError(
+                    "Please enter a valid date in YYYY-MM-DD format."
+                ) from error
+
+            try:
+                start_time = datetime.strptime(
+                    time_text, "%H:%M"
+                ).time()
+            except ValueError as error:
+                raise ValueError(
+                    "Please enter a valid time in HH:MM format, "
+                    "using 24-hour time."
+                ) from error
 
             success, message, appointment = (
                 self.appointment_controller.create_appointment(
@@ -272,15 +285,20 @@ class AppointmentView:
 
         if not success:
             self.balance_label.config(
-                text="Customer Balance: unavailable"
+                text="Customer: unavailable | ID: -- | Balance: --"
             )
             return
 
         balance = Decimal(str(customer.balance))
 
         self.balance_label.config(
-            text=f"Customer Balance: ${balance:.2f}"
+            text=(
+                f"Customer: {customer.name} | "
+                f"ID: {customer.customer_id} | "
+                f"Balance: ${balance:.2f}"
+            )
         )
+
 
     def view_customer_appointments(self):
         customer_id_text = self.customer_id_entry.get().strip()
@@ -452,8 +470,9 @@ class AppointmentView:
         self.offering_combo.set("")
 
         # Clear the customer balance display
-        self.balance_label.config(text="Customer Balance: --")
-
+        self.balance_label.config(
+            text="Customer: -- | ID: -- | Balance: --"
+        )
         # Clear the appointment results
         self.results.config(state="normal")
         self.results.delete("1.0", tk.END)
