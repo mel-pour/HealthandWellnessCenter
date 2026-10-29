@@ -1,21 +1,33 @@
 import tkinter as tk
 
 from views.customer_view import CustomerView
+from views.appointment_view import AppointmentView
+from views.offering_view import OfferingView
 
 
 class MainView:
-    def __init__(self, root, customer_controller):
+    def __init__(
+        self,
+        root,
+        customer_controller,
+        appointment_controller,
+        offering_service
+    ):
         self.root = root
         self.customer_controller = customer_controller
+        self.appointment_controller = appointment_controller
+        self.offering_service = offering_service
 
         self.root.title("Healthcare & Wellness Center")
-        self.root.geometry("600x450")
+        self.root.geometry("600x500")
         self.root.resizable(False, False)
 
         self.show_main_menu()
 
     def show_main_menu(self):
         self.clear_window()
+
+        self.root.geometry("600x500")
 
         self.main_frame = tk.Frame(self.root, padx=30, pady=30)
         self.main_frame.pack(fill="both", expand=True)
@@ -24,13 +36,13 @@ class MainView:
             self.main_frame,
             text="Healthcare & Wellness Center",
             font=("Arial", 20, "bold")
-        ).pack(pady=(30, 15))
+        ).pack(pady=(20, 15))
 
         tk.Label(
             self.main_frame,
             text="Welcome! Please choose an option.",
             font=("Arial", 12)
-        ).pack(pady=(0, 35))
+        ).pack(pady=(0, 20))
 
         tk.Button(
             self.main_frame,
@@ -39,7 +51,7 @@ class MainView:
             width=22,
             height=2,
             command=self.open_customer_view
-        ).pack(pady=10)
+        ).pack(pady=6)
 
         tk.Button(
             self.main_frame,
@@ -47,8 +59,17 @@ class MainView:
             font=("Arial", 12),
             width=22,
             height=2,
-            command=self.show_appointment_message
-        ).pack(pady=10)
+            command=self.open_appointment_view
+        ).pack(pady=6)
+
+        tk.Button(
+            self.main_frame,
+            text="Offering Management",
+            font=("Arial", 12),
+            width=22,
+            height=2,
+            command=self.open_offering_view
+        ).pack(pady=6)
 
     def open_customer_view(self):
         self.clear_window()
@@ -59,12 +80,23 @@ class MainView:
             self.show_main_menu
         )
 
-    def show_appointment_message(self):
-        from tkinter import messagebox
+    def open_appointment_view(self):
+        self.clear_window()
 
-        messagebox.showinfo(
-            "Coming Soon",
-            "We'll implement the Appointment View later."
+        AppointmentView(
+            self.root,
+            self.appointment_controller,
+            self.customer_controller,
+            self.show_main_menu
+        )
+
+    def open_offering_view(self):
+        self.clear_window()
+
+        OfferingView(
+            self.root,
+            self.offering_service,
+            self.show_main_menu
         )
 
     def clear_window(self):
