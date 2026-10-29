@@ -123,11 +123,12 @@ class AppointmentView:
         button_frame = tk.Frame(self.main_frame)
         button_frame.pack(pady=12)
 
-        tk.Button(
+        self.book_button = tk.Button(
             button_frame,
             text="Book Appointment",
             command=self.book_appointment
-        ).pack(side="left", padx=5)
+        )
+        self.book_button.pack(side="left", padx=5)
 
         tk.Button(
             button_frame,
@@ -192,6 +193,11 @@ class AppointmentView:
             )
 
     def book_appointment(self):
+        if self.book_button["state"] == "disabled":
+            return
+
+        self.book_button.config(state="disabled")
+
         try:
             appointment_id = int(
                 self.appointment_id_entry.get().strip()
@@ -264,12 +270,16 @@ class AppointmentView:
                 parent=self.root
             )
 
+
         except Exception as error:
             messagebox.showerror(
                 "Error",
                 f"An unexpected error occurred:\n{error}",
                 parent=self.root
             )
+
+        finally:
+            self.book_button.config(state="normal")
 
     def get_offering_name(self, offering_id):
         for offering in self.offerings:
