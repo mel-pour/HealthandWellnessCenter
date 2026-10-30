@@ -1,6 +1,7 @@
 class AppointmentController:
-    def __init__(self, appointment_service):
+    def __init__(self, appointment_service, offering_service):
         self.appointment_service = appointment_service
+        self.offering_service = offering_service
 
     def create_appointment(
         self,
@@ -104,6 +105,13 @@ class AppointmentController:
 
         except Exception:
             return False, "An unexpected error occurred.", None
+
+    def get_all_offerings(self):
+        try:
+            offerings = self.offering_service.get_all_offerings()
+            return True, "Offerings retrieved successfully.", offerings
+        except Exception:
+            return False, "Could not retrieve offerings.", None
 
     def get_appointment_info(self, appointment_id):
         try:

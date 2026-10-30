@@ -37,7 +37,8 @@ def main():
     customer_controller = CustomerController(customer_service)
 
     appointment_controller = AppointmentController(
-        appointment_service
+        appointment_service,
+        offering_service
     )
 
     # View

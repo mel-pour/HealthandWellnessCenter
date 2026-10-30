@@ -169,9 +169,19 @@ class AppointmentView:
 
     def load_offerings(self):
         try:
-            # Use the service through the controller's service reference
-            service = self.appointment_controller.appointment_service
-            self.offerings = service.offering_service.get_all_offerings()
+            success, message, offerings = (
+                self.appointment_controller.get_all_offerings()
+            )
+
+            if not success:
+                messagebox.showerror(
+                    "Offering Error",
+                    message,
+                    parent=self.root
+                )
+                return
+
+            self.offerings = offerings
 
             display_values = [
                 f"{offering.offering_id} - {offering.name} "
@@ -184,11 +194,13 @@ class AppointmentView:
 
             if display_values:
                 self.offering_combo.current(0)
+            else:
+                self.offering_combo.set("")
 
-        except Exception as error:
+        except Exception:
             messagebox.showerror(
                 "Offering Error",
-                f"Could not load offerings:\n{error}",
+                "Could not load offerings.",
                 parent=self.root
             )
 
