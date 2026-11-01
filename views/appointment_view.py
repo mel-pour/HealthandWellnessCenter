@@ -420,9 +420,29 @@ class AppointmentView:
                 )
                 return
 
+            success, message, preview = (
+                self.appointment_controller.preview_cancellation(
+                    appointment_id
+                )
+            )
+
+            if not success:
+                messagebox.showerror(
+                    "Cancellation Failed",
+                    message,
+                    parent=self.root
+                )
+                return
+
+            cancellation_fee = Decimal(
+                str(preview["cancellation_fee"])
+            )
+
+            refund_amount = Decimal(
+                str(preview["refund_amount"])
+            )
+
             price = Decimal(str(appointment.price_paid))
-            cancellation_fee = price * Decimal("0.20")
-            refund_amount = price * Decimal("0.80")
 
             confirmed = messagebox.askyesno(
                 "Confirm Cancellation",

@@ -162,7 +162,7 @@ class AppointmentService:
             customer_id
         )
 
-    def cancel_appointment(self, appointment_id):
+    def preview_cancellation(self, appointment_id):
         appointment = self.get_appointment(appointment_id)
 
         if appointment.status != "booked":
@@ -178,6 +178,18 @@ class AppointmentService:
         )
 
         refund_amount = price - fee
+
+        return fee, refund_amount
+
+    def cancel_appointment(self, appointment_id):
+        appointment = self.get_appointment(appointment_id)
+
+        if appointment.status != "booked":
+            raise ValueError(
+                "Only a booked appointment can be cancelled."
+            )
+
+        fee, refund_amount = self.preview_cancellation(appointment_id)
 
         # Mark the appointment as cancelled.
         appointment.status = "cancelled"

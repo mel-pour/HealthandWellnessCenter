@@ -81,6 +81,31 @@ class AppointmentController:
         except Exception:
             return False, "An unexpected error occurred.", None
 
+    def preview_cancellation(self, appointment_id):
+        try:
+            fee, refund_amount = (
+                self.appointment_service.preview_cancellation(
+                    appointment_id
+                )
+            )
+
+            result = {
+                "cancellation_fee": fee,
+                "refund_amount": refund_amount
+            }
+
+            return (
+                True,
+                "Cancellation preview calculated successfully.",
+                result
+            )
+
+        except (ValueError, TypeError) as error:
+            return False, str(error), None
+
+        except Exception:
+            return False, "Could not preview cancellation.", None
+
     def cancel_appointment(self, appointment_id):
         try:
             fee, refund_amount = (
