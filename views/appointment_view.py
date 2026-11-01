@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from datetime import datetime
 from decimal import Decimal
 
 
@@ -211,41 +210,23 @@ class AppointmentView:
         self.book_button.config(state="disabled")
 
         try:
-            appointment_id = int(
-                self.appointment_id_entry.get().strip()
-            )
-            customer_id = int(
-                self.customer_id_entry.get().strip()
-            )
+            appointment_id = self.appointment_id_entry.get().strip()
+            customer_id = self.customer_id_entry.get().strip()
 
             selected_index = self.offering_combo.current()
 
             if selected_index < 0:
-                raise ValueError("Please select an offering.")
+                messagebox.showerror(
+                    "Invalid Input",
+                    "Please select an offering.",
+                    parent=self.root
+                )
+                return
 
             offering = self.offerings[selected_index]
 
-            date_text = self.date_entry.get().strip()
-            time_text = self.time_entry.get().strip()
-
-            try:
-                appointment_date = datetime.strptime(
-                    date_text, "%Y-%m-%d"
-                ).date()
-            except ValueError as error:
-                raise ValueError(
-                    "Please enter a valid date in YYYY-MM-DD format."
-                ) from error
-
-            try:
-                start_time = datetime.strptime(
-                    time_text, "%H:%M"
-                ).time()
-            except ValueError as error:
-                raise ValueError(
-                    "Please enter a valid time in HH:MM format, "
-                    "using 24-hour time."
-                ) from error
+            appointment_date = self.date_entry.get().strip()
+            start_time = self.time_entry.get().strip()
 
             success, message, appointment = (
                 self.appointment_controller.create_appointment(

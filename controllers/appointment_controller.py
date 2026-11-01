@@ -1,17 +1,66 @@
+from datetime import datetime, date, time
+
+
+
 class AppointmentController:
     def __init__(self, appointment_service, offering_service):
         self.appointment_service = appointment_service
         self.offering_service = offering_service
 
+    @staticmethod
+    def _parse_id(value, field_name):
+        try:
+            return int(value)
+        except (ValueError, TypeError) as error:
+            raise ValueError(
+                f"{field_name} must be a valid integer."
+            ) from error
+
+    @staticmethod
+    def _parse_date(value):
+        if isinstance(value, date):
+            return value
+
+        try:
+            return datetime.strptime(value.strip(), "%Y-%m-%d").date()
+        except (ValueError, TypeError, AttributeError) as error:
+            raise ValueError(
+                "Please enter a valid date in YYYY-MM-DD format."
+            ) from error
+
+    @staticmethod
+    def _parse_time(value):
+        if isinstance(value, time):
+            return value
+
+        try:
+            return datetime.strptime(value.strip(), "%H:%M").time()
+        except (ValueError, TypeError, AttributeError) as error:
+            raise ValueError(
+                "Please enter a valid time in HH:MM format, using 24-hour time."
+            ) from error
+
     def create_appointment(
-        self,
-        appointment_id,
-        customer_id,
-        offering_id,
-        appointment_date,
-        start_time
+            self,
+            appointment_id,
+            customer_id,
+            offering_id,
+            appointment_date,
+            start_time
     ):
         try:
+            appointment_id = self._parse_id(
+                appointment_id, "Appointment ID"
+            )
+            customer_id = self._parse_id(
+                customer_id, "Customer ID"
+            )
+            offering_id = self._parse_id(
+                offering_id, "Offering ID"
+            )
+            appointment_date = self._parse_date(appointment_date)
+            start_time = self._parse_time(start_time)
+
             appointment = self.appointment_service.create_appointment(
                 appointment_id,
                 customer_id,
@@ -20,11 +69,7 @@ class AppointmentController:
                 start_time
             )
 
-            return (
-                True,
-                "Appointment booked successfully.",
-                appointment
-            )
+            return True, "Appointment booked successfully.", appointment
 
         except (ValueError, TypeError) as error:
             return False, str(error), None
